@@ -3,12 +3,15 @@ import { Server } from "socket.io";
 
 import { Player } from "./player.js";
 
-var players = {};
+/** Array of active players */
+const players = {};
+/** Player colour choices */
+const colors = ["red", "cyan", "pink", "yellow", "white"];
 
 const server = createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader("Content-Type", "text/plain");
-  res.end("Hello World");
+  res.end();
 });
 
 var io = new Server(server, {
@@ -18,14 +21,16 @@ var io = new Server(server, {
   },
 });
 
+/**
+ * Create socket for tracking players and player updates.
+ */
 io.sockets.on("connection", function (socket) {
   // CASE: New player joined
   socket.on("initialize", function (name) {
     console.log(name, "has connected!");
     var id = socket.id;
-    const colors = ["red color", "purple color", "green color", "black color"];
 
-    const random = Math.floor(Math.random() * colors.length);
+    var random = Math.floor(Math.random() * colors.length);
 
     // Creates a new player object with a unique ID number.
     var newPlayer = new Player(id, name, colors[random]);
