@@ -2,7 +2,7 @@ import { createServer } from "http";
 import { moment } from "moment";
 import { Server } from "socket.io";
 
-import { writeToDb } from "./dbConnector.js";
+import { endSession, writeToDb } from "./dbConnector.js";
 import { Player } from "./player.js";
 
 /** Array of active players */
@@ -70,6 +70,9 @@ io.sockets.on("connection", function (socket) {
   // CASE: Player disconnected
   socket.on("disconnect", function () {
     console.log("Got disconnect!", socket.id);
+
+    // Record duration time in database
+    endSession(socket.id);
 
     // Remove player from array
     delete players[socket.id];
