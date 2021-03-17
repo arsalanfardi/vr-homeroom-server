@@ -1,6 +1,8 @@
 import { createServer } from "http";
+import { moment } from "moment";
 import { Server } from "socket.io";
 
+import { writeToDb } from "./dbConnector.js";
 import { Player } from "./player.js";
 
 /** Array of active players */
@@ -29,6 +31,14 @@ io.sockets.on("connection", function (socket) {
   socket.on("initialize", function (name) {
     console.log(name, "has connected!");
     var id = socket.id;
+
+    writeToDb({
+      SOCKET_ID: { S: "001" },
+      NAME: { S: name },
+      JOIN_TIME_MST: {
+        S: moment().utcOffset("−07:00").format("YYYY-MM-DD HH:mm"),
+      }, // Store in mountain time
+    });
 
     var random = Math.floor(Math.random() * colors.length);
 
