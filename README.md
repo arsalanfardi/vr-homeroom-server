@@ -1,3 +1,23 @@
+### Starting the Server Locally
+
+#### Using npm
+To start the server, run the following commands:
+```
+npm install
+npm start
+```
+
+Note that this application was transpiled to ES6 syntax with Babel, simply running it with *node server.js* will not work.
+
+#### Using Docker
+First build the image and then run the container with the corresponding image ID. The first port number in the run command specifies the access port from the outside and is customizable. The second port number must correspond to the exposed port of the application as set by the Dockerfile.
+```
+docker build -t artana-server .
+docker run -p 80:80 [image_id]
+```
+
+### AWS ECS Instructions
+
 #### Create a repo
 ```
 aws ecr create-repository --repository-name "artana-server" --profile default --region us-east-1
