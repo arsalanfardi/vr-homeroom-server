@@ -1,5 +1,5 @@
 import { createServer } from "http";
-import { moment } from "moment";
+import moment from "moment";
 import { Server } from "socket.io";
 
 import { endSession, writeToDb } from "./dbConnector.js";
@@ -23,6 +23,13 @@ var io = new Server(server, {
   },
 });
 
+writeToDb({
+  SOCKET_ID: { S: "SERVER_START" },
+  JOIN_TIME_MST: {
+    S: moment().utcOffset("−07:00").format(),
+  },
+});
+
 /**
  * Create socket for tracking players and player updates.
  */
@@ -33,10 +40,10 @@ io.sockets.on("connection", function (socket) {
     var id = socket.id;
 
     writeToDb({
-      SOCKET_ID: { S: "001" },
+      SOCKET_ID: { S: socket.id },
       NAME: { S: name },
       JOIN_TIME_MST: {
-        S: moment().utcOffset("−07:00").format("YYYY-MM-DD HH:mm"),
+        S: moment().utcOffset("−07:00").format(),
       }, // Store in mountain time
     });
 

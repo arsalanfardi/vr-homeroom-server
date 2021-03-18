@@ -1,14 +1,29 @@
 import AWS from "aws-sdk";
-import { moment } from "moment";
+import dotenv from "dotenv";
+import moment from "moment";
 
-AWS.config.update({ region: "us-east-1" }); // Region of artana servers
+// Load env file
+dotenv.config();
+
+var awsConfig = {
+  region: "us-east-1", // Region of artana servers
+  accessKeyId: process.env.AWSAccessKeyId,
+  secretAccessKey: process.env.AWSSecretKey,
+};
+AWS.config.update(awsConfig);
 
 /** DynamoDB object */
 const ddb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
 /** DynamoDB table name */
 const TABLENAME = "ARTANA_USERS";
 
-export const writeToDB = function (item) {
+/**
+ * Write a dictionary item to DynamoDB.
+ *
+ * Ensure the item specifies value type (S, N, etc.).
+ * @param {*} item
+ */
+export const writeToDb = function (item) {
   const params = {
     TableName: TABLENAME,
     Item: item,
@@ -22,6 +37,10 @@ export const writeToDB = function (item) {
   });
 };
 
+/**
+ * End a user session by calculating the duration of the session and updating DynamoDB with the value.
+ * @param {*} socketId
+ */
 export const endSession = function (socketId) {
   const params = {
     TableName: TABLENAME,
