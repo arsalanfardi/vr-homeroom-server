@@ -1,3 +1,11 @@
+### VR Homeroom Multiplayer Server
+
+A Node.js server which enables multiplayer on a PlayCanvas VR application. The server is deployed on AWS Elastic Container Service, and communicates with a DynamoDB database for logging players and session durations.
+
+<p style="text-align:center">
+<img src="https://github.com/arsalanfardi/artana-server/blob/master/assets/playcanvas-image.PNG">
+</p>
+
 ### Starting the Server Locally
 
 #### Using npm
